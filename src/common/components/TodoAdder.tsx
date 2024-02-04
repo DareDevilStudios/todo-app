@@ -1,8 +1,12 @@
-// components/TodoAdder.tsx
 import { useState } from "react";
 import { Todo } from "../../types/Todo";
+import { Dispatch, SetStateAction } from "react";
 
-const TodoAdder = () => {
+interface TodoAdderProps {
+  addTodo: Dispatch<SetStateAction<Todo[]>>;
+}
+
+const TodoAdder: React.FC<TodoAdderProps> = ({ addTodo }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("To Do");
@@ -14,7 +18,11 @@ const TodoAdder = () => {
       description,
       status,
     };
-    // Perform necessary logic to add newTodo to the task list
+    addTodo((prevTodos) => [...prevTodos, newTodo]);
+    // Clear the input fields after adding the todo
+    setTitle("");
+    setDescription("");
+    setStatus("To Do");
   };
 
   return (
@@ -37,9 +45,8 @@ const TodoAdder = () => {
         value={status}
         onChange={(e) => setStatus(e.target.value)}
       >
-        <option value="To Do">To Do</option>
+        <option value="To Do">To Do ( set your status ) </option>
         <option value="In Progress">In Progress</option>
-        <option value="Done">Done</option>
       </select>
       <button
         className="border-2 border-white bg-black text-white py-2 px-4 hover:text-black hover:bg-white hover:text-xl duration-300 font-bold rounded-lg"
